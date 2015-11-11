@@ -59,19 +59,19 @@
               <tr><td>motomu</td><td>taisho</td><td>80</td></tr>
               <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
               <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
-              <tr><td>hogehoge</td><td>taisho</td><td>443</td></tr>
             </tbody>
           </table>
         </div>
-        <!--map-->
-        <div class="col-xs-10" id="world-map" style="width: 80vw; height: 80vh;">
+        <div class="col-xs-10">
+          <!--map-->
+          <div id="map" style="width: 80vw; height: 80vh;">
+          </div>
         </div>
       </div>
+    </div>
+
+    <div>
+    <button onclick="add();">add()</button>
     </div>
 
     <div class="container-fluid">
@@ -83,10 +83,40 @@
     <script src="./jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
     <script src="./bootstrap-customized/js/bootstrap.min.js"></script>
     <script src="./jvectormap/jquery-jvectormap-world-mill.js"></script>
+
     <script type="text/javascript">
       $(function(){
-        $('#world-map').vectorMap({map: 'world_mill'});
+        $('#map').vectorMap({map: 'world_mill'});
+        $(".jvectormap-container").children("svg")[0].setAttribute("id","svg")
+        $("#svg").children("g")[1].setAttribute("id","geo")
+
+        m_left = $('#map')[0].offsetLeft;
+        m_top = $('#map')[0].offsetTop;
+        m_width = $('#map')[0].offsetWidth;
+        m_height = $('#map')[0].offsetHeight;
       });
+    </script>
+
+    <script type="text/javascript">
+      function add(){
+        $path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+        long1 = -122; //8.8.8.8
+        lat1 = 37;    //8.8.8.8
+        long2 = 139;  //133.93.0.0
+        lat2 = 35;    //133.93.0.0
+        x1 = (180+long1) * 0.91*m_width/360 -15;
+        y1 = (lat1>=0) ? (180-lat1)*(m_height-117)/360+58+15 : (180+lat1)*(m_height-117)/360 +58
+        x2 = (180+long2) *m_width/360 -15;
+        y2 = (lat2>=0) ? (180-lat2)*m_height/360+15 : (180+lat2)*m_height/360
+
+        $path.attr({
+          d: "M "+x1+','+y1+' A 100,50 0 1,1 '+x2+','+y2,
+          stroke: "red",
+          fill: "none"
+        })
+
+        $('#geo').prepend($path);
+      }
     </script>
 
   </body>
